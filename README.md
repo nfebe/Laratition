@@ -12,16 +12,25 @@ echo substr("Laravel", 0, 4).substr("competition", 5);
 - Competitions - Add and manage competitions [CRUD]
 - Submissions - Registered users can submit solutions to competitions
 - Leaderboard - Top users can be tracked on leaderboard
-- Votes - Submissions and competitions can be votted
+- Votes - Submissions and competitions can be voted
 
 
-### Dev Installation
+## Setup instructions
 
-- `git clone https://github.com/Fenn-CS/Laratition.git`
+### Prerequisites
+
+- Docker
+- Docker Compose
+
+### Quick installation guide
+- `git clone git@github.com:nfebe/Laratition.git`
 - `cd Laratition`
-- `composer install`
-- `php artisan serve` or access via webserver
-
+- `cp .env.example .env`
+- `docker compose up -d app`
+- `docker compose exec app composer install`
+- `docker compose exec app php artisan key:generate`
+- `docker compose exec app php artisan migrate`
+- `docker compose exec app php artisan db:seed`
 
 ## Screenshots
 
