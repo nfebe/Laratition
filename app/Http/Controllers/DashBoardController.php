@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class DashBoardController extends Controller
 {
     /**
@@ -17,7 +15,7 @@ class DashBoardController extends Controller
         $this->middleware('verified');
     }
 
-    public function index() 
+    public function index()
     {
         return view('dashboard');
     }

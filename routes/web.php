@@ -3,10 +3,10 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashBoardController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +41,6 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
     return redirect('/dashboard')->with('verified', 'You have been successifully verified');
 })->middleware(['auth', 'signed'])->name('verification.verify');
-
 
 Route::get('/', [PublicController::class, 'welcome'])->name('welcome');
 Route::get('/dashboard', [DashBoardController::class, 'index']);
