@@ -32,9 +32,9 @@ class CompetitionController extends Controller
             'published' => 'boolean',
             'id' => 'required_if:update,true|integer',
             'thumbnail_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'user' => 'required|integer'
+            'user' => 'required|integer',
         ]);
-        $competition = new Competition();
+        $competition = new Competition;
         $imageName = '';
         if ($request->hasFile('thumbnail_image')) {
             $imageName = str_replace(' ', '', $request->image->getClientOriginalName());
@@ -43,9 +43,9 @@ class CompetitionController extends Controller
 
         $attach_categories = array_map('intval', explode(',', $request->categories[0]));
         $attach_tools = array_map('intval', explode(',', $request->tools[0]));
-        $message = "Competition Created Successfully 😃";
+        $message = 'Competition Created Successfully 😃';
         if ($request->update) {
-            $message = "Competition Updated Successfully 😃";
+            $message = 'Competition Updated Successfully 😃';
             $competition = Competition::find($request->id);
             // Make updated category list
             $existing_categories = $competition->categories()->get();
@@ -53,7 +53,7 @@ class CompetitionController extends Controller
             foreach ($existing_categories as $key => $cat) {
                 // Detach unselected categories
                 // Only attach non-existing categories in the selected list
-                if (!in_array($cat->id, $attach_categories)) {
+                if (! in_array($cat->id, $attach_categories)) {
                     $detach_categories[$key] = $cat->id;
                 } else {
                     if (($index = array_search($cat->id, $attach_categories)) !== false) {
@@ -62,14 +62,16 @@ class CompetitionController extends Controller
                     }
                 }
             }
-            if (count($detach_categories) > 0) $competition->categories()->detach($detach_categories);
+            if (count($detach_categories) > 0) {
+                $competition->categories()->detach($detach_categories);
+            }
             // Make updated tool list
             $existing_tools = $competition->tools()->get();
             $detach_tools = [];
             foreach ($existing_tools as $key => $tool) {
                 // Detach unselected tools
                 // Only attach non-existing tools in the selected list
-                if (!in_array($tool->id, $attach_tools)) {
+                if (! in_array($tool->id, $attach_tools)) {
                     $detach_tools[$key] = $tool->id;
                 } else {
                     if (($index = array_search($tool->id, $attach_tools)) !== false) {
@@ -78,11 +80,13 @@ class CompetitionController extends Controller
                     }
                 }
             }
-            if (count($detach_tools) > 0) $competition->tools()->detach($detach_tools);
+            if (count($detach_tools) > 0) {
+                $competition->tools()->detach($detach_tools);
+            }
         }
 
         $categories = Category::find($attach_categories);
-        $tools= Tool::find($attach_tools);
+        $tools = Tool::find($attach_tools);
         if ($request->update && $request->hasFile('image')) {
             $competition = Competition::find($request->id);
             // Delete old image is a new one was submitted
@@ -92,9 +96,15 @@ class CompetitionController extends Controller
         }
         $competition->title = $request->title;
         $competition->description = $request->description;
-        if ($request->published) $competition->published = $request->published;
-        if (!$request->update) $competition->user_id = $request->user;
-        if ($imageName) $competition->thumbnail_image = $imageName;
+        if ($request->published) {
+            $competition->published = $request->published;
+        }
+        if (! $request->update) {
+            $competition->user_id = $request->user;
+        }
+        if ($imageName) {
+            $competition->thumbnail_image = $imageName;
+        }
         $competition->save();
         $competition->categories()->attach($categories);
         $competition->tools()->attach($tools);
@@ -102,7 +112,7 @@ class CompetitionController extends Controller
         return response([
             'success' => true,
             'message' => 'Folders loaded 😃',
-            'competition' => $competition
+            'competition' => $competition,
         ], 200)->header('Content-Type', 'application/json');
     }
 
